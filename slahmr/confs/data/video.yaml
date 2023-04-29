@@ -1,8 +1,8 @@
 type: video
 split: val
-root: /path/to/data  # put your videos in root/videos/vid.mp4
+root: /homeL/cong/HitLyn/slahmr/assets  # put your videos in root/videos/vid.mp4
 video_dir: videos
-seq: basketball 
+seq: walking
 ext: mp4
 src_path: ${data.root}/${data.video_dir}/${data.seq}.${data.ext}
 frame_opts:
@@ -14,7 +14,7 @@ use_cams: True
 track_ids: "all"
 shot_idx: 0
 start_idx: 0
-end_idx: 180
+end_idx: -1
 split_cameras: True
 name: ${data.seq}-${data.track_ids}-shot-${data.shot_idx}-${data.start_idx}-${data.end_idx}
 sources:

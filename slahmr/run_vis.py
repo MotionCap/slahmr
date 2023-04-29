@@ -224,7 +224,9 @@ def launch_vis(i, args):
         exp_name = "-".join(path_name.split("/")[:2])
         save_dir = f"{args.save_root}/{exp_name}"
         os.makedirs(save_dir, exist_ok=True)
-
+    else:
+        save_dir = None
+        
     visualize_log(
         log_dir,
         dev_id,
