@@ -20,7 +20,7 @@ This code was tested on Ubuntu 22.04 LTS and requires a CUDA-capable GPU.
     git submodule update --init --recursive
     ```
 
-2. Set up conda environment. Run 
+2. Set up conda environment. Run
     ```
     source install.sh
     ```
@@ -95,53 +95,16 @@ The `motion_chunks` output will contain additional predictions from the motion p
 Please see `run_vis.py` for how to extract the people meshes from the output parameters.
 
 
-## Fitting to specific datasets:
-We provide configurations for dataset formats in `slahmr/confs/data`:
-1. Posetrack in `slahmr/confs/data/posetrack.yaml`
-2. Egobody in `slahmr/confs/data/egobody.yaml`
-3. 3DPW in `slahmr/confs/data/3dpw.yaml`
-4. Custom video in `slahmr/confs/data/video.yaml`
+## Export to FBX:
+Export human pose to fbx, run
+```
+python export_fbx.py --input=/homeL/cong/HitLyn/slahmr/outputs/logs/video-val/2023-04-29/skating-all-shot-0-0--1/motion_chunks/last_iteration.npz --output=/homeL/cong/HitLyn/slahmr/outputs/logs/video-val/2023-04-29/skating-all-shot-0-0--1/motion_chunks/output.fbx --gender=male
+```
+Export camera pose to fbx, run
 
-**Please make sure to update all paths to data in the config files.**
-
-We include tools to both process existing datasets we evaluated on in the paper, and to process custom data and videos.
-We include experiments from the paper on the Egobody, Posetrack, and 3DPW datasets.
-
-If you want to run on a large number of videos, or if you want to select specific people tracks for optimization,
-we recommend preprocesing in advance. 
-For a single downloaded video, there is no need to run preprocessing in advance.
-
-From the `slahmr/preproc` directory, run PHALP on all your sequences
 ```
-python launch_phalp.py --type <DATASET_TYPE> --root <DATASET_ROOT> --split <DATASET_SPLIT> --gpus <GPUS>
+python export_camera.py
 ```
-and run DROID-SLAM on all your sequences
-```
-python launch_slam.py --type <DATASET_TYPE> --root <DATASET_ROOT> --split <DATASET_SPLIT> --gpus <GPUS>
-```
-You can also update the paths to datasets in `slahmr/preproc/datasets.py` for repeated use.
-
-Then, from the `slahmr` directory,
-```
-python run_opt.py data=<DATA_CFG> run_opt=True run_vis=True
-```
-
-We've provided a helper script `launch.py` for launching many optimization jobs in parallel.
-You can specify job-specific arguments with a job spec file, such as the example files in `job_specs`,
-and batch-specific arguments shared across all jobs as
-```
-python launch.py --gpus 1 2 -f job_specs/pt_val_shots.txt -s data=posetrack exp_name=posetrack_val
-```
-
-## Evaluation on 3D datasets
-After launching and completing optimization on either the Egobody or 3DPW datasets,
-you can evaluate the outputs with scripts in the `eval` directory.
-Before running, please update `EGOBODY_ROOT` and `TDPW_ROOT` in `eval/tools.py`.
-Then, run
-```
-python run_eval.py -d <DSET_TYPE> -i <RES_ROOT> -f <JOB_FILE>
-```
-where `<JOB_FILE>` is the same job file used to launch all optimization runs.
 
 
 ## BibTeX
